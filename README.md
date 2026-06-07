@@ -6,7 +6,8 @@ The system allows users to create, update, view, cancel, and bulk cancel cinema 
 
 ## Team
 
-Barış Sürmelioğlu
+Baris Surmelioglu
+
 Ozan Polat
 
 ## Tech Stack
