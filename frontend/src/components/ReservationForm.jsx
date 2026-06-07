@@ -1,3 +1,5 @@
+import React from "react";
+
 const ReservationForm = ({
   customerName,
   selectedSeat,

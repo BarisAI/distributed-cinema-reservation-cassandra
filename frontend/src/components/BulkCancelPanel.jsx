@@ -1,3 +1,5 @@
+import React from "react";
+
 const BulkCancelPanel = ({ selectedReservationIds, onBulkCancel, onClearSelection, loading }) => {
   return (
     <section className="panel">

@@ -1,10 +1,50 @@
 const { client, cassandra } = require("../config/cassandraClient");
-const { v4: uuidv4 } = require("uuid");
+
+const validSeats = [
+  "A1", "A2", "A3", "A4", "A5", "A6",
+  "B1", "B2", "B3", "B4", "B5", "B6",
+  "C1", "C2", "C3", "C4", "C5", "C6",
+  "D1", "D2", "D3", "D4", "D5", "D6",
+  "E1", "E2", "E3", "E4", "E5", "E6"
+];
+
+const isValidSeat = (seatNumber) => {
+  return validSeats.includes(seatNumber);
+};
 
 const getNow = () => new Date();
 
+const moviePrefixes = {
+  MOVIE_INTERSTELLAR: "I",
+  MOVIE_INCEPTION: "I",
+  MOVIE_DARK_KNIGHT: "D",
+  MOVIE_CARS: "C",
+  MOVIE_TOY_STORY: "T",
+  MOVIE_AVATAR: "A",
+  MOVIE_MATRIX: "M"
+};
+
+const generateShortReservationId = (movieId, seatNumber) => {
+  const moviePrefix = moviePrefixes[movieId] || "X";
+  const seatPrefix = seatNumber?.charAt(0)?.toUpperCase() || "X";
+  const randomNumber = Math.floor(1000 + Math.random() * 9000);
+
+  return `${moviePrefix}${seatPrefix}${randomNumber}`;
+};
+
+const generateEventId = () => {
+  return `EV${Date.now()}${Math.floor(100 + Math.random() * 900)}`;
+};
+
 const createReservation = async ({ movieId, sessionId, seatNumber, customerName }) => {
-  const reservationId = uuidv4();
+  if (!isValidSeat(seatNumber)) {
+    return {
+      created: false,
+      reason: "Invalid seat number"
+    };
+  }
+
+  const reservationId = generateShortReservationId(movieId, seatNumber);
   const now = getNow();
 
   const insertSeatQuery = `
@@ -104,7 +144,7 @@ const createReservation = async ({ movieId, sessionId, seatNumber, customerName 
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       params: [
-        uuidv4(),
+        generateEventId(),
         reservationId,
         "CREATED",
         movieId,
@@ -191,6 +231,13 @@ const updateReservation = async (reservationId, { newSeatNumber, customerName })
   const finalSeatNumber = newSeatNumber || oldSeatNumber;
   const finalCustomerName = customerName || oldCustomerName;
   const now = getNow();
+
+  if (!isValidSeat(finalSeatNumber)) {
+    return {
+      updated: false,
+      reason: "Invalid seat number"
+    };
+  }
 
   if (finalSeatNumber !== oldSeatNumber) {
     const reserveNewSeatQuery = `
@@ -306,7 +353,7 @@ const updateReservation = async (reservationId, { newSeatNumber, customerName })
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       params: [
-        uuidv4(),
+        generateEventId(),
         reservationId,
         "UPDATED",
         movieId,
@@ -394,7 +441,7 @@ const cancelReservation = async (reservationId) => {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       params: [
-        uuidv4(),
+        generateEventId(),
         reservationId,
         "CANCELLED",
         current.movie_id,

@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS reservations_by_session (
   movie_id text,
   session_id text,
   seat_number text,
-  reservation_id uuid,
+  reservation_id text,
   customer_name text,
   status text,
   created_at timestamp,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS reservations_by_session (
 );
 
 CREATE TABLE IF NOT EXISTS reservations_by_id (
-  reservation_id uuid PRIMARY KEY,
+  reservation_id text PRIMARY KEY,
   movie_id text,
   session_id text,
   seat_number text,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS reservations_by_id (
 
 CREATE TABLE IF NOT EXISTS reservations_by_customer (
   customer_name text,
-  reservation_id uuid,
+  reservation_id text,
   movie_id text,
   session_id text,
   seat_number text,
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS reservations_by_customer (
 );
 
 CREATE TABLE IF NOT EXISTS reservation_events (
-  event_id uuid,
-  reservation_id uuid,
+  event_id text,
+  reservation_id text,
   event_type text,
   movie_id text,
   session_id text,

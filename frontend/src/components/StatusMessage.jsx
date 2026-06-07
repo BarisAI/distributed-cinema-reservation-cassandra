@@ -1,3 +1,5 @@
+import React from "react";
+
 const StatusMessage = ({ message, type }) => {
   if (!message) {
     return null;

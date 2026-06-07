@@ -1,3 +1,6 @@
+import React from "react";
+import { seats } from "../data/sampleMovies";
+
 const UpdateReservationModal = ({
   reservation,
   newSeatNumber,
@@ -34,11 +37,16 @@ const UpdateReservationModal = ({
         <div className="form-grid">
           <label>
             New Seat Number
-            <input
+            <select
               value={newSeatNumber}
-              onChange={(e) => onNewSeatNumberChange(e.target.value.toUpperCase())}
-              placeholder="Example: B4"
-            />
+              onChange={(e) => onNewSeatNumberChange(e.target.value)}
+            >
+              {seats.map((seat) => (
+                <option key={seat} value={seat}>
+                  {seat}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label>

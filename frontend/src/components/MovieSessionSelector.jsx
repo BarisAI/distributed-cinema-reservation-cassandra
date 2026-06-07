@@ -1,3 +1,4 @@
+import React from "react";
 import { movies } from "../data/sampleMovies";
 
 const MovieSessionSelector = ({

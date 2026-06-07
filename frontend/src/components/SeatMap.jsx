@@ -1,3 +1,4 @@
+import React from "react";
 import { seats } from "../data/sampleMovies";
 
 const SeatMap = ({ reservations, selectedSeat, onSeatSelect }) => {

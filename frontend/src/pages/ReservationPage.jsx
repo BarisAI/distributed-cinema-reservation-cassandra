@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MovieSessionSelector from "../components/MovieSessionSelector";
 import SeatMap from "../components/SeatMap";
 import ReservationForm from "../components/ReservationForm";
@@ -19,8 +19,26 @@ const ReservationPage = () => {
   const defaultMovie = movies[0];
   const defaultSession = defaultMovie.sessions[0];
 
-  const [selectedMovieId, setSelectedMovieId] = useState(defaultMovie.id);
-  const [selectedSessionId, setSelectedSessionId] = useState(defaultSession.id);
+  const getInitialMovieId = () => {
+    const savedMovieId = localStorage.getItem("selectedMovieId");
+    const movieExists = movies.some((movie) => movie.id === savedMovieId);
+
+    return movieExists ? savedMovieId : defaultMovie.id;
+  };
+
+  const getInitialSessionId = (movieId) => {
+    const selectedMovie = movies.find((movie) => movie.id === movieId) || defaultMovie;
+    const savedSessionId = localStorage.getItem("selectedSessionId");
+    const sessionExists = selectedMovie.sessions.some((session) => session.id === savedSessionId);
+
+    return sessionExists ? savedSessionId : selectedMovie.sessions[0].id;
+  };
+
+  const initialMovieId = getInitialMovieId();
+  const initialSessionId = getInitialSessionId(initialMovieId);
+
+  const [selectedMovieId, setSelectedMovieId] = useState(initialMovieId);
+  const [selectedSessionId, setSelectedSessionId] = useState(initialSessionId);
   const [selectedSeat, setSelectedSeat] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [reservations, setReservations] = useState([]);
@@ -52,16 +70,24 @@ const ReservationPage = () => {
 
   const handleMovieChange = (movieId) => {
     const movie = movies.find((item) => item.id === movieId);
+    const firstSessionId = movie.sessions[0].id;
+
     setSelectedMovieId(movieId);
-    setSelectedSessionId(movie.sessions[0].id);
+    setSelectedSessionId(firstSessionId);
     setSelectedSeat("");
     setSelectedReservationIds([]);
+
+    localStorage.setItem("selectedMovieId", movieId);
+    localStorage.setItem("selectedSessionId", firstSessionId);
   };
 
   const handleSessionChange = (sessionId) => {
     setSelectedSessionId(sessionId);
     setSelectedSeat("");
     setSelectedReservationIds([]);
+
+    localStorage.setItem("selectedMovieId", selectedMovieId);
+    localStorage.setItem("selectedSessionId", sessionId);
   };
 
   const handleCreateReservation = async () => {
@@ -200,7 +226,9 @@ const ReservationPage = () => {
           <SeatMap
             reservations={reservations}
             selectedSeat={selectedSeat}
-            onSeatSelect={setSelectedSeat}
+            onSeatSelect={(seatNumber) => {
+              setSelectedSeat((currentSeat) => currentSeat === seatNumber ? "" : seatNumber);
+            }}
           />
 
           <ReservationForm

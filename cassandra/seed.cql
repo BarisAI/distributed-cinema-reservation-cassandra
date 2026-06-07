@@ -10,10 +10,10 @@ INSERT INTO reservation_events (
   customer_name,
   created_at
 ) VALUES (
-  uuid(),
-  uuid(),
+  'SYSTEM_INIT_001',
+  'SYSTEM',
   'SYSTEM_INITIALIZED',
-  'MOVIE_1',
+  'MOVIE_INTERSTELLAR',
   'SESSION_18_00',
   'NONE',
   'SYSTEM',
