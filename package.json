@@ -1,0 +1,21 @@
+{
+  "name": "distributed-cinema-reservation-cassandra",
+  "version": "1.0.0",
+  "description": "Distributed Cinema Reservation System using Apache Cassandra",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install --prefix backend && npm install --prefix frontend && npm install --prefix stress-tests",
+    "backend": "npm run dev --prefix backend",
+    "frontend": "npm run dev --prefix frontend",
+    "stress": "npm run all --prefix stress-tests"
+  },
+  "keywords": [
+    "cassandra",
+    "distributed-database",
+    "cinema-reservation",
+    "big-data",
+    "distributed-processing"
+  ],
+  "author": "Baris Surmelioglu, Ozan Polat",
+  "license": "MIT"
+}

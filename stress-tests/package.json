@@ -1,0 +1,17 @@
+{
+  "name": "cinema-reservation-stress-tests",
+  "version": "1.0.0",
+  "description": "Stress tests for Distributed Cinema Reservation System",
+  "private": true,
+  "scripts": {
+    "test1": "node stressTest1_sameRequestFast.js",
+    "test2": "node stressTest2_randomRequests.js",
+    "test3": "node stressTest3_twoClientsOccupySeats.js",
+    "test4": "node stressTest4_cancelAndReserveLoop.js",
+    "test5": "node stressTest5_bulkCancellation.js",
+    "all": "node stressTest1_sameRequestFast.js && node stressTest2_randomRequests.js && node stressTest3_twoClientsOccupySeats.js && node stressTest4_cancelAndReserveLoop.js && node stressTest5_bulkCancellation.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9"
+  }
+}
